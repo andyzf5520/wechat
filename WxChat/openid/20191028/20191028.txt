@@ -1,8 +1,0 @@
-2019-10-28 10:40:17.727signature--openid-->011TK6Tf1bz2Bs0FoDRf1YT0Tf1TK6TK***oTzc1wyj2yeATNlJKuxsZTWV0b_s
-2019-10-28 11:11:37.153signature--openid-->071UmkCS0CJEw02sO2DS0M3jCS0UmkC2***oTzc1wyj2yeATNlJKuxsZTWV0b_s
-2019-10-28 11:16:18.228signature--openid-->021EKP901QiFwX1b1m701WsQ901EKP9r***oTzc1wyj2yeATNlJKuxsZTWV0b_s
-2019-10-28 11:49:37.164signature--openid-->011iQXD71rhNZL1QqLF71VRWD71iQXDC***oTzc1wyj2yeATNlJKuxsZTWV0b_s
-2019-10-28 11:59:00.572signature--openid-->001LGnPx0qLJdb1VfJMx0MYxPx0LGnP7***oTzc1wyj2yeATNlJKuxsZTWV0b_s
-2019-10-28 12:01:13.613signature--openid-->061tJije0LEjau1ixIje0SRDje0tJijA***oTzc1wyj2yeATNlJKuxsZTWV0b_s
-2019-10-28 12:02:12.256signature--openid-->071ZaMG72PtEyQ0ZbHG72sNaH72ZaMGl***oTzc1w8R5x0MoseBfbf0paylVDHs
-2019-10-28 12:03:29.586signature--openid-->061t9urT1amOO41h9koT16T4rT1t9urk***oTzc1w8R5x0MoseBfbf0paylVDHs

@@ -1,4 +1,7 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="WxChat.Home" %>
+﻿
+@{
+    Layout = null;
+}
 
 <!DOCTYPE html>
 <html>
@@ -52,7 +55,7 @@
 
 <body>
 
-    <%--<div class="weui-top">门店注册</div>--%>
+     
     <div class="weui-cells__group weui-cells__group_form">
         <form class="cmxform" runat="server" id="form" method="POST">
             <!--一下两者下拉框必须放在form中不然提交验证不生效-->
@@ -170,7 +173,7 @@
             <div class="weui-btn-area ">
                 <!-- <input id="btn" class="weui-btn weui-btn_primary" type="button" onclick="SubmitForm()" value="提交" /> -->
                 <input id="btn" class="weui-btn  weui-btn_primary" type="submit" value="提交">
-             
+
             </div>
             <div class="button_sp_area" id="hid" hidden="hidden">
                 <!-- <a href="javascript:;" id='showModel' class="weui-btn weui-btn_mini  weui-btn_primary">按钮弹框</a> -->
@@ -178,7 +181,7 @@
                 <a href="javascript:" id="time" style="display: none" class="weui-btn weui-btn_primary">3</a>秒后跳转授权页面
             </div>
 
- 
+
 
         </form>
     </div>
@@ -186,6 +189,9 @@
 
 
 </body>
+
+
+</html>
 <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
 
 <!--引入微信的两个js 微信公众号 JS SDK 接口调用必须使用-->
@@ -200,219 +206,219 @@
 <script type="text/javascript">
 
 
-    
-        var productList = [],
-            nodeList = [],
-            marketList = [];
 
-        var selectNodeId = '',
-            selectProduct = '',
-            selectMarket = '';
+    var productList = [],
+        nodeList = [],
+        marketList = [];
+
+    var selectNodeId = '',
+        selectProduct = '',
+        selectMarket = '';
 
 
-        $.showLoading();
-         setTimeout(function () {
-              $.hideLoading();
+    $.showLoading();
+    setTimeout(function () {
+        $.hideLoading();
 
-        }, 1500)
-        var isend = 0;
+    }, 1500)
+    var isend = 0;
 
-        // 所属大类
-        var fun1 = new Promise(function (resolve, reject) {
-            $.ajax({
-                type: "GET",
-                contentType: "application/json; charset=utf-8", //   
-                url: "https://circulation.bxsuyuan.com/api/ManageUserApp/GetBaseDataList", //url 
-                dataType: "json",
-                data: {
-                    type: "manageProductType"
-                },
-                success: function (res) {
-                    productList = res;
-                    productNames = []
-                    res.forEach(x => {
-                        productNames.push(x.name)
-                    })
+    // 所属大类
+    var fun1 = new Promise(function (resolve, reject) {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8", //
+            url: "https://circulation.bxsuyuan.com/api/ManageUserApp/GetBaseDataList", //url
+            dataType: "json",
+            data: {
+                type: "manageProductType"
+            },
+            success: function (res) {
+                productList = res;
+                productNames = []
+                res.forEach(x => {
+                    productNames.push(x.name)
+                })
 
-                    resolve(isend += 1);
-                    $("#businessScope").picker({
-                        title: "请选择经营大类",
-                        cols: [{
-                            textAlign: 'center',
-                            values: productNames //["水产", "冻肉", "鲜肉", "牛羊肉", "蔬菜"]
-                        }],
-                        onChange: function (p, v, dv) {
-                            // console.log(p, v, dv);
-                            console.log(p.value);
-                            var selectName = p.value
-                            var m = productList.find(x => {
-                                return x.name = selectName
-                            })
-                            selectProduct = m.id
-                            console.log('Name:' + p.value + "id:" + selectProduct);
-                        },
-                        onClose: function (p, v, d) {
-                            console.log("close");
-                        }
-                    });
-                    console.log(res);
-                    console.log("----获取成功-------")
-                },
-                error: function (e) {
+                resolve(isend += 1);
+                $("#businessScope").picker({
+                    title: "请选择经营大类",
+                    cols: [{
+                        textAlign: 'center',
+                        values: productNames //["水产", "冻肉", "鲜肉", "牛羊肉", "蔬菜"]
+                    }],
+                    onChange: function (p, v, dv) {
+                        // console.log(p, v, dv);
+                        console.log(p.value);
+                        var selectName = p.value
+                        var m = productList.find(x => {
+                            return x.name = selectName
+                        })
+                        selectProduct = m.id
+                        console.log('Name:' + p.value + "id:" + selectProduct);
+                    },
+                    onClose: function (p, v, d) {
+                        console.log("close");
+                    }
+                });
+                console.log(res);
+                console.log("----获取成功-------")
+            },
+            error: function (e) {
 
-                    $("#businessScope").picker({
-                        title: "请选择经营大类",
-                        cols: [{
-                            textAlign: 'center',
-                            values: []
-                        }],
+                $("#businessScope").picker({
+                    title: "请选择经营大类",
+                    cols: [{
+                        textAlign: 'center',
+                        values: []
+                    }],
 
-                    });
-                    resolve(e);
-                    console.log(e.responseJSON.Message)
-                    console.log("获取失败")
-                },
-                complete: function () {
-                    console.log("获取失败")
-                }
-            });
-        })
-        //  所属企业
-        var fun2 = new Promise(function (resolve, reject) {
-            $.ajax({
-                type: "GET",
-                contentType: "application/json; charset=utf-8", //  所属企业
-                url: "https://circulation.bxsuyuan.com/api/ManageNodeApp/GetManageNodeListById", //url GetBaseDataList
-                dataType: "json",
-                data: {
-                    manageNodeId: ''
-                },
-                success: function (res) {
-                    nodeList = res;
-                    var nodeNames = []
-                    res.forEach(x => {
-                        nodeNames.push(x.name)
-                    })
-                    resolve(isend += 1);
-                    $("#manageNodeId").picker({
-                        title: "请选择所属企业",
-                        cols: [{
-                            textAlign: 'center',
-                            values: nodeNames
-                        }],
-                        onChange: function (p, v, dv) {
-                            console.log(p.value);
-                            var selectName = p.value
-                            var m = nodeList.find(x => {
-                                return x.name = selectName
-                            })
-                            selectNodeId = m.value
-                            console.log('Name:' + p.value + "id:" + selectNodeId);
-                        },
-                        onClose: function (p, v, d) {
-                            console.log("close");
-                        }
-                    });
-                    console.log(res);
-                    console.log("----获取成功-------")
-                },
-                error: function (e) {
-                    $("#manageNodeId").picker({
-                        title: "请选择所属企业",
-                        cols: [{
-                            textAlign: 'center',
-                            values: []
-                        }],
+                });
+                resolve(e);
+                console.log(e.responseJSON.Message)
+                console.log("获取失败")
+            },
+            complete: function () {
+                console.log("获取失败")
+            }
+        });
+    })
+    //  所属企业
+    var fun2 = new Promise(function (resolve, reject) {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8", //  所属企业
+            url: "https://circulation.bxsuyuan.com/api/ManageNodeApp/GetManageNodeListById", //url GetBaseDataList
+            dataType: "json",
+            data: {
+                manageNodeId: ''
+            },
+            success: function (res) {
+                nodeList = res;
+                var nodeNames = []
+                res.forEach(x => {
+                    nodeNames.push(x.name)
+                })
+                resolve(isend += 1);
+                $("#manageNodeId").picker({
+                    title: "请选择所属企业",
+                    cols: [{
+                        textAlign: 'center',
+                        values: nodeNames
+                    }],
+                    onChange: function (p, v, dv) {
+                        console.log(p.value);
+                        var selectName = p.value
+                        var m = nodeList.find(x => {
+                            return x.name = selectName
+                        })
+                        selectNodeId = m.value
+                        console.log('Name:' + p.value + "id:" + selectNodeId);
+                    },
+                    onClose: function (p, v, d) {
+                        console.log("close");
+                    }
+                });
+                console.log(res);
+                console.log("----获取成功-------")
+            },
+            error: function (e) {
+                $("#manageNodeId").picker({
+                    title: "请选择所属企业",
+                    cols: [{
+                        textAlign: 'center',
+                        values: []
+                    }],
 
-                    });
-                    resolve(e);
-                    console.log(e.responseJSON.Message)
-                    console.log("获取失败")
-                },
-                complete: function () {
-                    console.log("获取失败")
-                }
-            });
-        })
-        //  所属市场
-        var fun3 = new Promise(function (resolve, reject) {
-            $.ajax({
-                type: "GET",
-                contentType: "application/json; charset=utf-8",
-                url: "https://circulation.bxsuyuan.com/api/ManageUserApp/GetBaseDataList", //url 
-                dataType: "json",
-                data: {
-                    type: "ownerMarket"
-                },
-                success: function (res) {
-                    marketList = res
-                    marketNames = []
-                    res.forEach(x => {
-                        marketNames.push(x.name)
-                    })
-                    resolve(isend += 1);
+                });
+                resolve(e);
+                console.log(e.responseJSON.Message)
+                console.log("获取失败")
+            },
+            complete: function () {
+                console.log("获取失败")
+            }
+        });
+    })
+    //  所属市场
+    var fun3 = new Promise(function (resolve, reject) {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: "https://circulation.bxsuyuan.com/api/ManageUserApp/GetBaseDataList", //url
+            dataType: "json",
+            data: {
+                type: "ownerMarket"
+            },
+            success: function (res) {
+                marketList = res
+                marketNames = []
+                res.forEach(x => {
+                    marketNames.push(x.name)
+                })
+                resolve(isend += 1);
 
-                    // $("#ownerMarket").picker("setValue", ["2012", "12", "12"]);
-                    $('#ownerMarket').picker({
-                        title: "请选择所属市场",
-                        cols: [{
-                            textAlign: 'center',
-                            values: marketNames // ['市场1', '市场2']
-                        }],
-                        onChange: function (p, v, dv) {
-                            console.log(p.value);
-                            var selectName = p.value
-                            var m = marketList.find(x => {
-                                return x.name = selectName
-                            })
-                            selectMarket = m.id
+                // $("#ownerMarket").picker("setValue", ["2012", "12", "12"]);
+                $('#ownerMarket').picker({
+                    title: "请选择所属市场",
+                    cols: [{
+                        textAlign: 'center',
+                        values: marketNames // ['市场1', '市场2']
+                    }],
+                    onChange: function (p, v, dv) {
+                        console.log(p.value);
+                        var selectName = p.value
+                        var m = marketList.find(x => {
+                            return x.name = selectName
+                        })
+                        selectMarket = m.id
 
-                            console.log('Name:' + p.value + "id:" + selectMarket);
-                        },
-                        onClose: function (p, v, d) {
-                            //改变的时候触发none会校验失效一直为红
-                            // if (p.value == '无市场') {
-                            //     $('#ishidden').css('display', 'flex')
-                            // } else {
-                            //     $('#ishidden').css('display', 'none')
-                            // }
-                            console.log("close");
-                        }
-                    })
-                    console.log(res);
-                    console.log("----获取成功-------")
-                },
-                error: function (e) {
-                    $("#ownerMarket").picker({
-                        title: "请选择所属市场",
-                        cols: [{
-                            textAlign: 'center',
-                            values: []
-                        }],
+                        console.log('Name:' + p.value + "id:" + selectMarket);
+                    },
+                    onClose: function (p, v, d) {
+                        //改变的时候触发none会校验失效一直为红
+                        // if (p.value == '无市场') {
+                        //     $('#ishidden').css('display', 'flex')
+                        // } else {
+                        //     $('#ishidden').css('display', 'none')
+                        // }
+                        console.log("close");
+                    }
+                })
+                console.log(res);
+                console.log("----获取成功-------")
+            },
+            error: function (e) {
+                $("#ownerMarket").picker({
+                    title: "请选择所属市场",
+                    cols: [{
+                        textAlign: 'center',
+                        values: []
+                    }],
 
-                    });
+                });
 
-                    resolve(e);
-                    console.log(e.responseJSON.Message)
-                    console.log("获取失败")
-                },
-                complete: function () {
-                    console.log("获取失败")
-                }
-            });
-        })
+                resolve(e);
+                console.log(e.responseJSON.Message)
+                console.log("获取失败")
+            },
+            complete: function () {
+                console.log("获取失败")
+            }
+        });
+    })
 
-       
 
-        Promise.all([fun1, fun2, fun3]).then(function (resolve, reject) {
-            //做多个异步操作完成后
-            $.hideLoading();
-            console.log("加载完成")
-        }).catch(err => {
 
-            $.hideLoading();
-            console.log("加载失败")
-        })
+    Promise.all([fun1, fun2, fun3]).then(function (resolve, reject) {
+        //做多个异步操作完成后
+        $.hideLoading();
+        console.log("加载完成")
+    }).catch(err => {
+
+        $.hideLoading();
+        console.log("加载失败")
+    })
 
 
     // picker 选择器 可以配合jqueryValidate使用 select 得校验两边才行
@@ -440,7 +446,7 @@
 
     $().ready(function () {
 
-
+        console.log(document.cookie.split(";"));
         // 校验提示显示顶部
         // $("#showTooltips").click(function() {
         //     var tel = $('#tel').val();
@@ -451,7 +457,7 @@
         //   });
         // 弹出框提示
 
- 
+
         $('#showModel').click(function () {
             elstamp = 2019
             $.modal({
@@ -644,5 +650,3 @@
 
     });
 </script>
-
-</html>

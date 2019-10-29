@@ -10,6 +10,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using WxApi.Models;
 
 namespace WxApi.Controllers
 {
@@ -32,7 +33,7 @@ namespace WxApi.Controllers
 
         // GET api/values/5
         [HttpGet]
-        public async Task<HttpResponseMessage> GetUser(string code, string state)
+        public async Task<IHttpActionResult> GetUser(string code, string state)
         {
             try
             {
@@ -75,18 +76,18 @@ namespace WxApi.Controllers
 
                 //return this.Redirect("Home/Index");
                 //var path = AppDomain.CurrentDomain.BaseDirectory+"/wxview/wxlogin.html";
-                //
-                response.Content = new StringContent($"<script>alert('xxx');window.location.href=\"http://snc5uk.natappfree.cc/wxview/wxlogin.html\";  window.close();</script>", System.Text.Encoding.Default);
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
-          
-                //return Ok(result);
-                return response;
+                // 这样跳转会死循环
+                //response.Content = new StringContent($"<script>alert('xxx');window.location.href=\"http://snc5uk.natappfree.cc/wxview/wxlogin.html\";  window.close();</script>", System.Text.Encoding.Default);
+                //response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+                //return response;
+                return Ok(result);
+
 
             }
             catch (Exception e)
             {
 
-                throw e;
+                throw  e;
             }
 
 
@@ -181,30 +182,5 @@ namespace WxApi.Controllers
         }
     }
 
-    public class ResultData
-    {
-
-        public string access_token { get; set; }
-        public string openid { get; set; }
-        //[JsonProperty(".expires_in")]
-        public string expires_in { get; set; }
-        public string refresh_token { get; set; }
-        public string errcode { get; set; }
-        public string errmsg { get; set; }
-        public UserInfo userInfo { get; set; }
-    }
-    public class UserInfo
-    {
-
-        public string nickname { get; set; }
-        public string sex { get; set; }
-        public string headimgurl { get; set; }
-        public string province { get; set; }
-        public string country { get; set; }
-        public string language { get; set; }
-        public string city { get; set; }
-        public string unionid { get; set; }
-        public string openid { get; set; }
-
-    }
+   
 }

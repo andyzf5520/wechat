@@ -10,7 +10,7 @@
 namespace WxChat {
     
     
-    public partial class GetUser {
+    public partial class ButtonClick {
         
         /// <summary>
         /// form1 控件。

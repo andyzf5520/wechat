@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Access_token.xml" />
+    <Content Include="ButtonClick.aspx" />
     <Content Include="GetUser.aspx" />
     <Content Include="Home.aspx" />
     <Content Include="index.aspx" />
@@ -79,6 +80,13 @@
   <ItemGroup>
     <Compile Include="AccessTokenDAL.cs" />
     <Compile Include="Access_token.cs" />
+    <Compile Include="ButtonClick.aspx.cs">
+      <DependentUpon>ButtonClick.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ButtonClick.aspx.designer.cs">
+      <DependentUpon>ButtonClick.aspx</DependentUpon>
+    </Compile>
     <Compile Include="GetUser.aspx.cs">
       <DependentUpon>GetUser.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

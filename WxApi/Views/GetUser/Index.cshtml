@@ -1,0 +1,59 @@
+﻿
+
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.1/css/jquery-weui.min.css" />
+</head>
+<body>
+
+
+    <div style="height:50%">
+
+    </div>
+    <div style="text-align:center">
+
+        <div id="error" hidden="@ViewBag.ishidden"  style="color:red">
+
+            错误信息：  <label runat="server" id="lerror" >@ViewBag.Error</label><br />
+            <button id="btnback" class="weui-btn weui-btn_primary">点击返回</button>
+
+        </div>
+        <hr style="border: 1px solid gray;" />
+
+    </div>
+
+
+    <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+
+    <!--引入微信的两个js 微信公众号 JS SDK 接口调用必须使用-->
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js "></script>
+    <!--jqueryWEUI原生和微信Weui作用相同-->
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            const APPID = 'wx725745973888374b';
+            const REDIRECT_URI = 'http://zy4rr4.natappfree.cc/Home/index';
+            const SCOPE = 'snsapi_userinfo';
+
+
+            $("#btnback").click(function () {
+                var urls = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + APPID + '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) + '&response_type=code&scope=' + SCOPE + '&state=STATE#wechat_redirect'
+                window.location.href = REDIRECT_URI; //"index.html"
+
+
+            })
+        })
+
+    </script>
+
+</body>
+</html>

@@ -55,7 +55,7 @@
 
 <body>
 
-     
+
     <div class="weui-cells__group weui-cells__group_form">
         <form class="cmxform" runat="server" id="form" method="POST">
             <!--一下两者下拉框必须放在form中不然提交验证不生效-->
@@ -89,14 +89,12 @@
                     <label for="manageBusinessType" class="weui-label">商户类型</label>
                 </div>
                 <div class="weui-cell__bd">
-                    <label for="manageBusinessType" class="s">
-                        <input type="radio" checked="checked" id="manageBusinessType" value="0" name="manageBusinessType">
-                        批发商
-                    </label>
-                    <label for="manageBusinessType" class="s">
-                        <input type="radio" id="manageBusinessType" value="1" name="manageBusinessType">
-                        零售商
-                    </label>
+
+                    <input type="radio" checked="checked" id="manageBusinessType" value="0" name="manageBusinessType">
+                    批发商
+                    <input type="radio" id="manageBusinessType" value="1" name="manageBusinessType">
+                    零售商
+
                 </div>
 
             </div>
@@ -443,8 +441,20 @@
         }
     });
 
-
+    //$.alert({
+    //    title: '系统提示',
+    //    content: "注册成功!",
+    //    icon: 'fa fa-comment',
+    //    type: 'green',
+    //    buttons: {
+    //        "是的": function () {
+    //            console.log("注册成功")
+    //            window.location.href = "http://yzpj25.natappfree.cc"
+    //        }
+    //    }
+    //});
     $().ready(function () {
+
 
         console.log(document.cookie.split(";"));
         // 校验提示显示顶部
@@ -484,7 +494,17 @@
                 return true
             }
         }, "请输入正确的手机号");
-
+        //获取cookie
+        var getCookie = function (cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1);
+                if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+            }
+            return "";
+        }
         $("#form").validate({
             rules: {
                 businessScope: {
@@ -554,7 +574,7 @@
                 tel: {
                     required: '请输入11位手机号',
                     // number: '请输入数字类型',
-                    rangelength: '请输入11位手机号',
+                    rangelength: '长度须为11位',
 
                 },
                 managePerson: {
@@ -579,9 +599,17 @@
                 //$('#form').submit(function (params) {
                 var ruls = $("#businessScope").rules();
 
+                var unionid = getCookie('unionid')
+                var openid = getCookie('openid')
+                var token = getCookie('access_token')
+                if (!unionid) {
+                    //$.toptip('请获取授权后尝试');$.toptip('操作成功', 2000, 'success');  //设置显示时间
+                    $.toptip('请获取授权后尝试', 'error');
+                    return
+                }
                 var datas = {
                     businessScope: selectProduct, //$('#businessScope').val(),
-                    manageBusinessType: $('input:radio:checked').val(),
+                    manageBusinessType: $("input[name='manageBusinessType']:checked").val(),
                     manageNodeId: selectNodeId, // $('#manageNodeId').val(),
                     ownerMarket: selectMarket, //$('#ownerMarket').val(),
                     manageUserName: $("#manageUserName").val(),
@@ -589,7 +617,8 @@
                     managePerson: $('#managePerson').val(),
                     tel: $('#tel').val(),
                     manageBusinessName: $('#manageBusinessName').val(),
-                    businessNo: $('#businessNo').val()
+                    businessNo: $('#businessNo').val(),
+                    unionid: unionid == null ? openid : unionid
                 }
                 var listArryJsons = [datas];
                 console.log(listArryJsons)
@@ -617,12 +646,14 @@
 
                         $.confirm({
                             title: '提示',
-                            text: '注册成功',
+                            text: '注册成功点击跳转',
                             onOK: function () {
-                                //点击确认
+                                //点击确认  http://yzpj25.natappfree.cc
+                                console.log("注册成功")
+                                window.location.href = "http://yzpj25.natappfree.cc"
                             },
                             onCancel: function () {
-
+                                window.location.href = "http://yzpj25.natappfree.cc"
                             }
                         });
 
@@ -631,6 +662,7 @@
                         $.toptip(e.responseJSON.Message);
 
                         console.log(e.responseJSON.Message)
+                        return
                     },
                     complete: function () {
                         console.log("失败")

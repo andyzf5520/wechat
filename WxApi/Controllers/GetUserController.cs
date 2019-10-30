@@ -10,19 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using WxApi.Models;
 
 namespace WxApi.Controllers
 {
     public class GetUserController : Controller
     {
-        // GET: GetUser
-        public ActionResult Index()
-        {
-            ViewBag.isHidden = "hidden";
-            return View();
-        }
-
         public string appid = ConfigurationManager.AppSettings["AppId"].ToString();
         public string secret = ConfigurationManager.AppSettings["Secret"].ToString();
         public string Host = ConfigurationManager.AppSettings["Host"].ToString();
@@ -31,6 +25,9 @@ namespace WxApi.Controllers
         public string openid { get; set; }
         public string unionid { get; set; }
         public string expires_in { get; set; }
+        
+
+       
         //public string redirect_uri = HttpUtility.UrlDecode(HttpContext.Current.Request.Url.Host+ "/GetUser.aspx");
 
 
@@ -40,7 +37,10 @@ namespace WxApi.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
+        /// <summary>
+        /// 注册跳转页获取unionId
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult> Index(string code, string state)
         {
@@ -127,6 +127,11 @@ namespace WxApi.Controllers
 
 
         }
+
+        /// <summary>
+        ///  注册门店页面
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]  // 因为往别的数据库更新 不需要post视图
         public ActionResult Regist()
         {
@@ -278,7 +283,59 @@ namespace WxApi.Controllers
             }
         }
 
-        // POST api/values
+
+
+        #region JS服务器接口信息配置地址
+
+        private string Token = "Token";
+        [HttpGet]
+        public string Validate()
+        {
+            string echoStr = Request.QueryString["echoStr"].ToString();
+
+            if (CheckSignature())
+            {
+                if (!string.IsNullOrEmpty(echoStr))
+                {
+                    return echoStr;
+                }
+               
+            } return null;
+           
+        }
+      
+
+        /// <summary>    
+        /// 微信请求的地址      
+        /// </summary>      
+        /// <param name="echostr">随机字符串，用于返回微信</param>      
+        /// <param name="signature">微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。 </param>     
+        /// <param name="timestamp">时间戳 </param>    
+        /// <param name="nonce">随机数</param>      
+        /// <returns></returns>   
+        public bool CheckSignature()
+        {
+
+            string signature = Request.QueryString["signature"].ToString();
+            string timestamp = Request.QueryString["timestamp"].ToString();
+            string nonce = Request.QueryString["nonce"].ToString();
+            string[] ArrTmp = { Token, timestamp, nonce };
+            Array.Sort(ArrTmp);     //字典排序  
+            string tmpStr = string.Join("", ArrTmp);
+            tmpStr = FormsAuthentication.HashPasswordForStoringInConfigFile(tmpStr, "SHA1");
+            tmpStr = tmpStr.ToLower();
+            if (tmpStr == signature)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+
+        } 
+        #endregion
 
     }
 

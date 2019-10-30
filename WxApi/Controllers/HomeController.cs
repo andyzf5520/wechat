@@ -14,5 +14,6 @@ namespace WxApi.Controllers
 
             return View();
         }
+
     }
 }
